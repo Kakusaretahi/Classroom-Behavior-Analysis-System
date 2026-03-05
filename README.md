@@ -1,3 +1,4 @@
+运行main.py以使用系统 
 1.基于yolo11n.pt训练的模型，位于model/，dataset来源于https://github.com/Whiffe/SCB-dataset
 2.Student Classroom Anomaly Detection System 是一个基于深度学习的视频分析系统，用于自动识别课堂中学生的行为并检测异常情况。
 3.系统整体流程如下：导入课堂视频 -> YOLO行为识别 -> 行为统计分析 -> 群体异常检测 -> 时间序列数据生成 -> LSTM趋势预测 -> 桌面客户端可视化
