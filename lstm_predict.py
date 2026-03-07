@@ -4,26 +4,34 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
+import sys
+import os
 
-data = pd.read_csv("output/collective_timeseries.csv")
-ratios = data["ratio"].values.reshape(-1,1)
+OUTPUT_DIR = sys.argv[1]
+data = pd.read_csv(os.path.join(OUTPUT_DIR,"collective_timeseries.csv")) #读取CSV数据
+ratios = data["ratio"].values.reshape(-1,1) #取出异常比例数据
+
+#数据归一化
 scaler = MinMaxScaler()
 ratios_scaled = scaler.fit_transform(ratios)
+
+#用连续20帧数据预测下一帧
 SEQ_LEN = 20
 X=[]
 y=[]
 
 for i in range(len(ratios_scaled)-SEQ_LEN):
+
     X.append(ratios_scaled[i:i+SEQ_LEN])
     y.append(ratios_scaled[i+SEQ_LEN])
 
 X=np.array(X)
 y=np.array(y)
-
 X=torch.tensor(X,dtype=torch.float32)
 y=torch.tensor(y,dtype=torch.float32)
 
 class LSTMModel(nn.Module):
+
     def __init__(self):
         super().__init__()
         self.lstm=nn.LSTM(1,32,batch_first=True)
@@ -38,12 +46,14 @@ class LSTMModel(nn.Module):
 model=LSTMModel()
 criterion=nn.MSELoss()
 optimizer=torch.optim.Adam(model.parameters(),lr=0.01)
+
 for epoch in range(100):
     output=model(X)
     loss=criterion(output,y)
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
+
 model.eval()
 pred=model(X).detach().numpy()
 pred=scaler.inverse_transform(pred)
@@ -53,4 +63,4 @@ plt.plot(real,label="Real")
 plt.plot(pred,label="Predicted")
 plt.legend()
 plt.title("Abnormal Ratio Prediction")
-plt.savefig("output/predict.png")
+plt.savefig(os.path.join(OUTPUT_DIR,"predict.png"))
