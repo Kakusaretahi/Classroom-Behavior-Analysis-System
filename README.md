@@ -10,7 +10,7 @@ source venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 
-使用 GUI 界面：python ui/main.py 
+使用 GUI 界面：python ui/main.py
 
 1.基于yolo11n.pt训练的模型，位于model/，dataset来源于https://github.com/Whiffe/SCB-dataset
 
