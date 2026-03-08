@@ -1,4 +1,16 @@
-运行main.py以使用系统 
+# 在项目目录下创建虚拟环境
+python -m venv venv
+# 激活虚拟环境
+# Windows
+venv\Scripts\activate
+# macOS / Linux
+source venv/bin/activate
+
+在虚拟环境中运行：
+pip install --upgrade pip
+pip install -r requirements.txt
+
+使用 GUI 界面：python ui/main.py 
 
 1.基于yolo11n.pt训练的模型，位于model/，dataset来源于https://github.com/Whiffe/SCB-dataset
 
